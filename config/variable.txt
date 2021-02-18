@@ -1,0 +1,243 @@
+package config
+
+import (
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/stmcginnis/gofish"
+)
+
+var (
+	// GOFISH is global variable
+	GOFISH *gofish.APIClient
+
+	// Status map
+	Status = map[string]float64{"OK": 0.0}
+
+	// Idracuser info
+	Idracuser = "root"
+	// Idracpassword info
+	Idracpassword = "calvin"
+
+	// IDRAC Metric
+
+	// S_health => System Health Metric
+	S_health = prometheus.NewDesc(
+		"idrac_system_health",
+		"idrac_system_health {0: OK, 1: Warning, 2: Critical}",
+		[]string{
+			"bios_backup",
+			"bios_version",
+			"intelligent_provisioning_version",
+			"os_description",
+			"os_name",
+			"pca_part_number",
+			"post_state",
+			"power_state",
+			"serial_number",
+			"server_model",
+			"sku",
+		},
+		nil,
+	)
+
+	// C_powercontrol => Chassis Power Control Metric
+	C_powercontrol = prometheus.NewDesc(
+		"idrac_power_control",
+		"Power Control",
+		[]string{
+			"average_consumed",
+			"capacity",
+			"id",
+			"interval_in_min",
+			"max_consumed",
+			"min_consumed",
+		},
+		nil,
+	)
+
+	// C_powerconsumedbyall => Chassis Power Control Metric
+	C_powerconsumedbyall = prometheus.NewDesc(
+		"idrac_power_consumed_by_all",
+		"Power Consumed By All",
+		[]string{
+			"capacity",
+			"id",
+		},
+		nil,
+	)
+
+	// C_powerconsumedbyeach => Chassis Power Control Metric
+	C_powerconsumedbyeach = prometheus.NewDesc(
+		"idrac_power_consumed_by_each",
+		"Power Consumed By each",
+		[]string{
+			"capacity",
+			"id",
+			"model",
+			"location",
+		},
+		nil,
+	)
+
+	// C_powersupplystatus => Chassis Power Control Metric
+	C_powersupplystatus = prometheus.NewDesc(
+		"idrac_power_supply_status",
+		"Power Supply status {0: OK, 1: Warning, 2: Critical}",
+		[]string{
+			"capacity",
+			"id",
+			"model",
+			"location",
+			"hot_plug_capable",
+			"power_supply_status",
+			"max_output_watts_10s_interval",
+			"spare_part_number",
+			"firmware_version",
+		},
+		nil,
+	)
+
+	S_memory = prometheus.NewDesc(
+		"idrac_system_memory",
+		"No helpful",
+		[]string{
+			"allocation_alignment_MiB",
+			"allocation_increment_MiB",
+			"base_module_type",
+			"bus_width_bits",
+			"cach_size_MiB",
+			"capacity_MiB",
+			"configuration_locked",
+			"data_width_bits",
+			"description",
+			"device_locator",
+			"error_correction",
+			"firmware_api_version",
+			"firmware_revision",
+			"is_rank_square_enabled",
+			"is_square_device_enabled",
+			"logical_size_MiB",
+			"manufacturer",
+			"memory_device_type",
+			"memory_type",
+			"operating_speed_Mhz",
+			"part_number",
+			"rank_count",
+			"serial_number",
+			"status",
+		},
+		nil,
+	)
+
+	S_ethernetinterface = prometheus.NewDesc(
+		"idrac_system_ethernet_interface",
+		"No helpful",
+		[]string{
+			"auto_negotiation",
+			"description",
+			"ethernet_interface_type",
+			"fqdn",
+			"full_duplex",
+			"host_name",
+			"mac_address",
+			"mtu_size",
+			"speed_Mbps",
+			"status_health",
+		},
+		nil,
+	)
+
+	S_processor = prometheus.NewDesc(
+		"idrac_system_processor",
+		"No helpful",
+		[]string{
+			"actions",
+			"description",
+			"manufacturer",
+			"max_speed_MHz",
+			"max_td_watts",
+			"model",
+			"processor_type",
+			"socket",
+			"status_health",
+			"sub_processors",
+			"td_watts",
+			"total_cores",
+			"total_enabled_cores",
+			"total_threads",
+			"uuid",
+		},
+		nil,
+	)
+
+	C_thermal = prometheus.NewDesc(
+		"idrac_thermal",
+		"No helpful",
+		[]string{
+			"description",
+			"fans_count",
+			"redundancy_count",
+			"status_health",
+			"temperatures_count",
+		},
+		nil,
+	)
+
+	C_fan = prometheus.NewDesc(
+		"idrac_fan",
+		"No helpful",
+		[]string{
+			"hot_pluggable",
+			"indicator_LED",
+			"lower_threshold_critical",
+			"lower_threshold_fatal",
+			"lower_threshold_non_critical",
+			"manufacturer",
+			"max_reading_range",
+			"member_id",
+			"min_reading_range",
+			"model",
+			"part_number",
+			"physical_context",
+			"reading",
+			"reading_units",
+			"redundancy_count",
+			"sensor_number",
+			"serial_number",
+			"square_part_number",
+			"status_health",
+			"upper_threshold_critical",
+			"upper_threshold_fatal",
+			"upper_threshold_non_critical",
+		},
+		nil,
+	)
+
+	C_temperature = prometheus.NewDesc(
+		"idrac_chassis_temperature",
+		"No helpful",
+		[]string{
+			"adjusted_max_allowable_operating_value",
+			"adjusted_min_allowable_operating_value",
+			"delta_physical_context",
+			"delta_reading_celsius",
+			"lower_threshold_critical",
+			"lower_threshold_fatal",
+			"lower_threshold_non_critical",
+			"lower_threshold_user",
+			"max_allowable_operating_value",
+			"max_reading_range_temp",
+			"member_id",
+			"min_allowable_operating_value",
+			"min_reading_range_temp",
+			"physical_context",
+			"reading_celsius",
+			"sensor_number",
+			"status_health",
+			"upper_threshold_critical",
+			"upper_threshold_fatal",
+			"upper_threshold_non_critical",
+			"upper_threshold_user",
+		},
+		nil,
+	)
+)
