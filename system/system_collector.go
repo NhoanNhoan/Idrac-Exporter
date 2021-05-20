@@ -140,7 +140,6 @@ func (collector SystemCollector) collectStorage(ch chan<- prometheus.Metric, sys
 				fmt.Sprintf("%v", storage.EnclosuresCount),
 			)
 
-			collector.collectVolumes(ch, storage)
 			collector.collectDrives(ch, storage)
 		}
 	}
@@ -331,13 +330,14 @@ func (collector SystemCollector) makeNetworkPortMetricFromNetworkInterfaces(ch c
 func (collector SystemCollector) collectNetworkPortMetricFromNetworkAdapter(ch chan<- prometheus.Metric,
 	adapter *redfish.NetworkAdapter) {
 	networkPorts, err := adapter.NetworkPorts()
+	linkStatus_dict := map[string]float64{"Up": 0.0, "Down": 1.0}
 
 	if nil != err {
 		panic(err)
 	}
 
 	for _, networkPort := range networkPorts {
-		status := config.State_dict[string(networkPort.Status.Health)]
+		status := linkStatus_dict[networkPort.LinkStatus]
 		ch<- prometheus.MustNewConstMetric(config.S_networkport,
 			prometheus.GaugeValue,
 			status,
