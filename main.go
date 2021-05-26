@@ -17,7 +17,7 @@ import (
 )
 
 func metrichandler(w http.ResponseWriter, r *http.Request) {
-	// var err error
+	var err error
 	conf := gofish.ClientConfig{
 		Endpoint: r.URL.Query().Get("idrac_host"),
 		Username: config.Idracuser,
@@ -25,59 +25,20 @@ func metrichandler(w http.ResponseWriter, r *http.Request) {
 		Insecure: true,
 	}
 	fmt.Println(r.URL.Query().Get("idrac_host"))
-	config.GOFISH, _ = gofish.Connect(conf)
-
-	/*
-	//
-
-	fmt.Println("Running Test")
-	processor := testUnmarshall(config.GOFISH)
-	
-	metric := prometheus.MustNewConstMetric(config.S_processor,
-		prometheus.GaugeValue,
-		0.0,
-		processor.Actions,
-			processor.Description,
-			processor.Manufacturer,
-			fmt.Sprintf("%v", processor.MaxSpeedMHz),
-			fmt.Sprintf("%v", processor.MaxTDPWatts),
-			processor.Model,
-			fmt.Sprintf("%v", processor.ProcessorType),
-			processor.Socket,
-			processor.SubProcessors,
-			fmt.Sprintf("%v", processor.TDPWatts),
-			fmt.Sprintf("%v", processor.TotalCores),
-			fmt.Sprintf("%v", processor.TotalEnabledCores),
-			fmt.Sprintf("%v", processor.TotalThreads),
-			processor.UUID,
-	)
-	//
-
+	config.GOFISH, err = gofish.Connect(conf)
 
 	if err != nil {
-		panic(err)
+		fmt.Println("Connection Error", err)
+		return
 	}
 	defer config.GOFISH.Logout()
 
-	client := io_prometheus_client.Metric{}
-	metric.Write(&client)
-	fmt.Println(client.String())
-
-	fmt.Println(metric.Desc())
-
-		input := model.Metric(model.LabelSet{
-			"a": "bb",
-			"b": "c",
-		})
-
-		fmt.Println(input.String()
-*/
-
 	fmt.Println(" Connect successfull")
 
-	mhandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{
-		ErrorHandling: promhttp.ContinueOnError,
-	})
+	// mhandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{
+	// 	ErrorHandling: promhttp.ContinueOnError,
+	// })
+	mhandler := promhttp.Handler()
 	mhandler.ServeHTTP(w, r)
 
 }
